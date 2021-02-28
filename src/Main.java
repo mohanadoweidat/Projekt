@@ -1,10 +1,29 @@
+import Controller.ClientController;
+
+import javax.swing.*;
+import java.io.FileNotFoundException;
+
 public class Main
 {
-    public static void main(String[] args) {
-        System.out.println("Test from sara");
-        System.out.println("hejsaraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah //Susanne");
-        System.out.println("Mohanad newwww");
-        System.out.println("Test for sahand");
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    ClientController clientController = new ClientController();
+                }
+                catch (FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 }
 
