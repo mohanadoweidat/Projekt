@@ -1,7 +1,6 @@
-
 test
-C:\Users\mohan\Desktop\20200601015054_1.jpg
-annie
-C:\Users\mohan\Desktop\Snapchat-1984683468.jpg
-Daniel
-C:\Users\mohan\Desktop\fråga 6.jpg
+C:\Users\mohan\Desktop\Uml_classes_en.svg.png
+test2
+C:\Users\mohan\Desktop\Uml_classes_en.svg.png
+test3
+C:\Users\mohan\Desktop\Uml_classes_en.svg.png
