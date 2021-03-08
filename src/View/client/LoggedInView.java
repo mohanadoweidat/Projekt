@@ -138,7 +138,7 @@ public class LoggedInView extends JFrame
 		});
 		uploadBtn.setBounds(490, 533, 120 , 70);
 		getContentPane().add(uploadBtn);
-		JLabel activeUserLabel = new JLabel("Online användare:");
+		JLabel activeUserLabel = new JLabel("Online:");
 		activeUserLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		activeUserLabel.setBounds(559, 43, 95, 16);
 		getContentPane().add(activeUserLabel);
