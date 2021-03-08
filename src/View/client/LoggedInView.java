@@ -46,7 +46,8 @@ public class LoggedInView extends JFrame
 	public void init()
 	{
 		//Frame
-		setTitle("Client Frame-" + user.getUsername());
+		//setTitle("Client Frame-" + user.getUsername());
+		setTitle("Client Frame-");
 		setBounds(100, 100, 926, 680);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
