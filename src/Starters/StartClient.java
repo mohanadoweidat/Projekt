@@ -1,16 +1,26 @@
 package Starters;
 
+import Model.Shared.User;
+
 import Controller.ClientController;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class StartClient
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
-		EventQueue.invokeLater(() -> {
+
+		new ClientController();
+		/*
+		User u = User.getUserFromFile();
+		if (u == null){
 			new ClientController();
-			new ClientController();
-		});
+		}else{
+			new ClientController(u);
+		}
+
+		 */
 	}
 }

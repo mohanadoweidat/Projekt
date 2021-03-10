@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="DateTimePicker">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/DateTimePicker" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/DateTimePicker" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/DateTimePicker" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/DateTimePicker" recursive="false" type="SOURCES" />
+  </library>
+</component>

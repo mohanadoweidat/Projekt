@@ -1,22 +1,39 @@
 package View.client;
 
+import Controller.ClientController;
+import Model.Shared.Message;
 import Model.Shared.User;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Set;
 
 public class LoggedInView extends JFrame
 {
 	private JTextField clientTypingBoard;
-	private JTextArea clientMessageBoard;
+	private JList<Message> clientMessageList;
+
+	public JList<Message> getClientMessageList()
+	{
+		return clientMessageList;
+	}
+
 	private JList clientActiveUsersList;
+
+	private JList contactJList;
 
 
 	private JRadioButton oneToNBtn;
 	private JRadioButton broadcastBtn;
+	private JRadioButton contactListBtn;
 	private JButton uploadBtn;
 	private JButton clientEndSessionButton;
 
@@ -24,15 +41,20 @@ public class LoggedInView extends JFrame
 	private JLabel user_id;
 
 
-	private DefaultListModel<String> listModel;
+	private DefaultListModel<User> listModel;
+	private DefaultListModel<User> contactListModel;
 	private JFileChooser fileChooser;
 
+	private ClientController clientController;
+
 	private User user;
+	private ImageIcon MessageImage;
 
 
-	public LoggedInView(User user)
+	public LoggedInView(ClientController clientController)
 	{
-		this.user = user;
+		this.clientController = clientController;
+		user = clientController.getUser();
 		init();
 	}
 
@@ -55,25 +77,31 @@ public class LoggedInView extends JFrame
 
 		//Components
 
-		//clientMessageBoard
-		clientMessageBoard = new JTextArea();
-		clientMessageBoard.setEditable(false);
-		clientMessageBoard.setBounds(12, 63, 530, 457);
-		getContentPane().add(clientMessageBoard);
+		//clientMessageList
+		clientMessageList = new JList<>();
+		clientMessageList.setCellRenderer(new MessageBoxRenderer());
+		clientMessageList.setBounds(12, 63, 530, 457);
+		getContentPane().add(clientMessageList);
+
 
 
 		//user_icon
 		user_icon = new JLabel();
-		//user_icon.setIcon(new ImageIcon((Image) user.getProfilePicture()));
+		ImageIcon icon;
+		icon = user.getProfilePicture();
+		Image image = icon.getImage(); // transform it
+		Image newimg = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH); // scale it the smooth way
+		icon = new ImageIcon(newimg);  // transform it back
+		user_icon.setIcon(icon);
 		user_icon.setHorizontalAlignment(SwingConstants.LEFT);
-		user_icon.setBounds(12, 5, 60, 50);
+		user_icon.setBounds(12, 5, 50, 50);
 		getContentPane().add(user_icon);
 
 		//user_id
-		user_id = new JLabel("");
-		user_id.setHorizontalAlignment(SwingConstants.LEFT);
-		user_id.setFont(new Font("Verdana", Font.PLAIN, 18));
-		user_id.setBounds(70, 12, 50, 45);
+		user_id = new JLabel(user.getUsername());
+		user_id.setHorizontalAlignment(SwingConstants.LEADING);
+		user_id.setFont(new Font("Verdana", Font.BOLD, 10));
+		user_id.setBounds(90, 12, 70, 50);
 		getContentPane().add(user_id);
 
 		//clientTypingBoard
@@ -104,8 +132,31 @@ public class LoggedInView extends JFrame
 		listModel = new DefaultListModel<>();
 		clientActiveUsersList.setModel(listModel);
 		clientActiveUsersList.setToolTipText("Online användare:");
-		clientActiveUsersList.setBounds(554, 63, 327, 457);
+		clientActiveUsersList.setBounds(554, 63, 350, 460);
 		getContentPane().add(clientActiveUsersList);
+		clientActiveUsersList.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() > 1)
+				{
+					User selectedUser = (User) clientActiveUsersList.getSelectedValue();
+					user.getContacts().add(selectedUser);
+					contactJList.setListData(user.getContacts().toArray());
+				}
+			}
+		});
+
+		//contactJList
+		contactJList = new JList();
+		contactListModel = new DefaultListModel<>();
+		contactJList.setModel(contactListModel);
+		contactJList.setToolTipText("Kontakter:");
+		contactJList.setBounds(554, 63, 350, 460);
+		contactJList.setCellRenderer(new UserBoxRenderer());
+		getContentPane().add(contactJList);
+
 
 		//Exit button
 		clientEndSessionButton = new JButton("Avsluta");
@@ -133,6 +184,7 @@ public class LoggedInView extends JFrame
 				if (option == JFileChooser.APPROVE_OPTION)
 				{
 					File pic = fileChooser.getSelectedFile();
+					MessageImage = new ImageIcon(pic.getPath());
 				}
 			}
 		});
@@ -144,12 +196,13 @@ public class LoggedInView extends JFrame
 		getContentPane().add(activeUserLabel);
 
 		//oneToNBtn button
-		oneToNBtn = new JRadioButton("1 till N");
+		oneToNBtn = new JRadioButton("PM");
 		oneToNBtn.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				clientActiveUsersList.setVisible(true);
 				clientActiveUsersList.setEnabled(true);
 			}
 		});
@@ -160,12 +213,39 @@ public class LoggedInView extends JFrame
 
 		//broadcastBtn
 		broadcastBtn = new JRadioButton("Till alla");
+		broadcastBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				clearSelectedUser();
+				clientActiveUsersList.setEnabled(false);
+
+			}
+		});
 		broadcastBtn.setBounds(774, 24, 107, 25);
 		getContentPane().add(broadcastBtn);
+
+
+		//contactListBtn
+		contactListBtn = new JRadioButton("Kontakter");
+		contactListBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				clientActiveUsersList.setVisible(false);
+				contactJList.setVisible(true);
+			}
+		});
+		contactListBtn.setBounds(866, 24, 142, 25);
+		getContentPane().add(contactListBtn);
+
 
 		ButtonGroup btngrp = new ButtonGroup();
 		btngrp.add(oneToNBtn);
 		btngrp.add(broadcastBtn);
+		btngrp.add(contactListBtn);
 		setVisible(true);
 
 

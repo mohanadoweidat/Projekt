@@ -1,5 +1,6 @@
 package Model.Shared;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
 public class SynchronizedHashSet<V>

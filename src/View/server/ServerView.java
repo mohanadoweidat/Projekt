@@ -3,12 +3,17 @@ package View.server;
 import Controller.ServerController;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ServerView extends JFrame
 {
 	private JTextArea serverMessageBoard;
 	private JList allUserNameList;
 	private JList activeClientList;
+
+	private JButton logViewrButton;
 
 	public JList getAllUserNameList()
 	{
@@ -22,6 +27,7 @@ public class ServerView extends JFrame
 
 	private DefaultListModel<String> activeUsers = new DefaultListModel<String>();
 	private DefaultListModel<String> allUsers = new DefaultListModel<String>();
+
 
 	public DefaultListModel<String> getActiveUsers()
 	{
@@ -68,6 +74,7 @@ public class ServerView extends JFrame
 		activeClientList.setBounds(526, 78, 218, 156);
 		getContentPane().add(activeClientList);
 
+
 		//All Usernames label
 		JLabel all_usernames = new JLabel("All Usernames");
 		all_usernames.setHorizontalAlignment(SwingConstants.LEFT);
@@ -79,6 +86,7 @@ public class ServerView extends JFrame
 		active_users.setBounds(526, 53, 98, 23);
 		getContentPane().add(active_users);
 
+		this.setResizable(false);
 	}
 
 	//To show Message in ServerMessageBoard

@@ -20,7 +20,7 @@ public class User extends Thread implements Serializable
 	private Icon profilePicture;
 	private ObjectOutputStream oos;
 
-	public User(String username, Icon profilePicture)
+	public User(String username, ImageIcon profilePicture)
 	{
 		try
 		{
@@ -70,6 +70,7 @@ public class User extends Thread implements Serializable
 			}
 
 		}
+		return null;
 	}
 
 	@Override
@@ -156,16 +157,6 @@ public class User extends Thread implements Serializable
 		this.uuid = uuid;
 	}
 
-	public Socket getSocket()
-	{
-		return socket;
-	}
-
-	public void setSocket(Socket socket)
-	{
-		this.socket = socket;
-	}
-
 	public Set<User> getContacts()
 	{
 		return contacts;
@@ -206,23 +197,18 @@ public class User extends Thread implements Serializable
 		this.username = username;
 	}
 
-	public Icon getProfilePicture()
+	public ImageIcon getProfilePicture()
 	{
 		return profilePicture;
 	}
 
-	public void setProfilePicture(Icon profilePicture)
+	public void setProfilePicture(ImageIcon profilePicture)
 	{
 		this.profilePicture = profilePicture;
 	}
 
-	public ObjectOutputStream getOos()
+	public boolean isLoggedIn()
 	{
-		return oos;
-	}
-
-	public void setOos(ObjectOutputStream oos)
-	{
-		this.oos = oos;
+		return isLoggedIn;
 	}
 }

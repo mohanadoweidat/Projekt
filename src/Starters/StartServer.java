@@ -17,6 +17,7 @@ public class StartServer
 				try
 				{
 					ServerController serverController = new ServerController();
+
 				}
 				catch (IOException e)
 				{

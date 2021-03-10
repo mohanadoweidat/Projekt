@@ -1,6 +1,8 @@
 package Controller;
 
-public class ServerMessageObject
+import java.io.Serializable;
+
+public class ServerMessageObject implements Serializable
 {
 	private MessageType type;
 	private Object object;

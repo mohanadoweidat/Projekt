@@ -26,7 +26,6 @@ public class SignUpView extends JFrame
 	private JButton btnChooseImage = new JButton("Choose image");
 
 	private ImageIcon icon;
-	private String username;
 	private String path;
 
 
@@ -69,7 +68,7 @@ public class SignUpView extends JFrame
 
 		avatarPane = new JPanel();
 		avatarPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		avatarPane.setBounds(278, 11, 112, 113);
+		avatarPane.setBounds(310, 50, 50, 50);
 		contentPane.add(avatarPane);
 
 		btnChooseImage.setBounds(275, 135, 125, 23);
@@ -94,6 +93,11 @@ public class SignUpView extends JFrame
 				{
 					File file = JFC.getSelectedFile();
 					icon = new ImageIcon(file.getPath());
+					Image image = icon.getImage(); // transform it
+					Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH); // scale it the
+					// smooth way
+					icon = new ImageIcon(newimg);  // transform it back
+
 					avatarPane.removeAll();
 					avatarPane.add(new JLabel(icon));
 					avatarPane.updateUI();
@@ -113,34 +117,31 @@ public class SignUpView extends JFrame
 				}
 				else
 				{
+					//TODO: fix- När man klickar på connect då fryser skärmen. (GUI freezing) :: ? Thread
+					// problem:kanske?
 					String usernameText = txtUsername.getText();
 					try
 					{
 
-						//Check that username field is not empty
-						if (usernameText.equalsIgnoreCase(""))
+						//Check if the entered username is not Connected to the server
+						boolean exists = clientController.CheckIfUserExists(usernameText);
+						//Username already exists (Connected)
+						if (exists)
 						{
-							JOptionPane.showMessageDialog(null, "Please enter your username first!", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+
+							JOptionPane.showMessageDialog(null, "Username already Connected, please login with " +
+									"another username!", "ERROR", JOptionPane.ERROR_MESSAGE);
+							txtUsername.setText("");
 						}
+
+						//Username not Connected to the server ---> Done login
 						else
 						{
-							//Check if the entered username is not Connected to the server
-							boolean exists = clientController.CheckIfUserExists(usernameText);
-							//Username already exists (Connected)
-							if (exists)
-							{
-								JOptionPane.showMessageDialog(null,
-										"Username already Connected, please login with " + "another username!", "ERROR"
-										, JOptionPane.ERROR_MESSAGE);
-								txtUsername.setText("");
-							}
-							//Username  not Connected to the server ---> Done login
-							else
-							{
-								User user = clientController.createUser(usernameText, icon);
-								System.out.println("User:" + usernameText + "are now logged!!");
-							}
+							User user = clientController.createUser(usernameText, icon);
+							//loggedInView = new LoggedInView(clientController);
+							System.out.println("User:" + usernameText + "are now logged!!");
+							user.setLoggedIn(true);
+							setVisible(false);
 						}
 					}
 					catch (Exception ex)
@@ -152,6 +153,4 @@ public class SignUpView extends JFrame
 
 		}
 	}
-
-
 }

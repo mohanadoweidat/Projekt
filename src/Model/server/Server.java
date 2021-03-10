@@ -1,18 +1,19 @@
-package Model;
+package Model.server;
 
+import Controller.MessageType;
 import Controller.ServerController;
 import Controller.ServerMessageObject;
 import Model.Shared.Message;
 import Model.Shared.SynchronizedHashSet;
 import Model.Shared.User;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+
 
 public class Server extends Thread
 {
@@ -33,12 +34,16 @@ public class Server extends Thread
 		this.controller = controller;
 		this.port = port;
 		serverSocket = new ServerSocket(port);
+		logs = new HashSet<>();
+
+		this.unsentMessages = new SynchronizedHashSet<>();
 		controller.getServerView().serverMessageBoardAppend("Message Server running..");
 		controller.getServerView().serverMessageBoardAppend("Vi kör på port:" + port);
 		controller.getServerView().serverMessageBoardAppend("------------------------------------");
 		controller.getServerView().serverMessageBoardAppend("Waiting for the clients...");
-		this.ccSocket = serverSocket.accept();
-		new ClientControllerHandler(ccSocket);
+
+		loadServerFromFile();
+		this.start();
 	}
 
 
