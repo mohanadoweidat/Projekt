@@ -4,6 +4,7 @@ import Model.server.Server;
 import View.server.LoggerView;
 import View.server.ServerView;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class ServerController

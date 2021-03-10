@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClientController
+public class ClientController extends Thread
 {
 
 	private ObjectInputStream inputStream;
@@ -95,11 +95,17 @@ public class ClientController
 
 	//TODO: Kanske flytta alla dessa metoder till  Connection
 	// Check if the user is already connected to the server
-	public boolean CheckIfUserExists(String username) throws IOException
+	public boolean CheckIfUserExists(String username) throws IOException, ClassNotFoundException
 	{
 		outStream.writeObject(new ServerMessageObject(MessageType.VERFY_NAME, username));
 		outStream.flush();
-		return inputStream.readBoolean();
+
+		while (s.getInputStream().available() == 0)
+		{
+
+		}
+		ServerMessageObject serverMessageObject = (ServerMessageObject) inputStream.readObject();
+		return (boolean) serverMessageObject.getObject();
 	}
 
 	public void disconnect() throws IOException
@@ -125,6 +131,18 @@ public class ClientController
 		{
 			e.printStackTrace();
 		}
+		this.start();
 		return user;
+	}
+
+
+	public LoggedInView getView()
+	{
+		return view;
+	}
+
+	public void setView(LoggedInView view)
+	{
+		this.view = view;
 	}
 }

@@ -69,10 +69,11 @@ public class LoggedInView extends JFrame
 	{
 		//Frame
 		//setTitle("Client Frame-" + user.getUsername());
-		setTitle("Client Frame-");
+		setTitle("Messenger - Logged in as: " + user.getUsername());
 		setBounds(100, 100, 926, 680);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
+		this.setResizable(false);
 
 
 		//Components
@@ -82,7 +83,6 @@ public class LoggedInView extends JFrame
 		clientMessageList.setCellRenderer(new MessageBoxRenderer());
 		clientMessageList.setBounds(12, 63, 530, 457);
 		getContentPane().add(clientMessageList);
-
 
 
 		//user_icon
@@ -120,7 +120,34 @@ public class LoggedInView extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				String textAreaMessage = clientTypingBoard.getText();
+				ImageIcon selectedImg = MessageImage;
 
+				if (selectedImg != null || !textAreaMessage.equalsIgnoreCase(""))
+				{
+					if (clientActiveUsersList.getSelectedValue() != null && oneToNBtn.isSelected())
+					{
+						sendMessageLogic(textAreaMessage, selectedImg);
+					}
+					else if (broadcastBtn.isSelected())
+					{
+						sendMessageLogic(textAreaMessage, selectedImg);
+					}
+					else if (contactJList.getSelectedValue() != null && contactListBtn.isSelected())
+					{
+						sendMessageLogic(textAreaMessage, selectedImg);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Please choose one receiver from the list!", "OBS!",
+								JOptionPane.ERROR_MESSAGE);
+					}
+
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Please write a message or upload a picture!", "OBS!",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		clientSendMsgBtn.setBounds(625, 533, 115, 70);
@@ -129,6 +156,7 @@ public class LoggedInView extends JFrame
 
 		//clientActiveUsersList
 		clientActiveUsersList = new JList();
+		clientActiveUsersList.setCellRenderer(new UserBoxRenderer());
 		listModel = new DefaultListModel<>();
 		clientActiveUsersList.setModel(listModel);
 		clientActiveUsersList.setToolTipText("Online användare:");
@@ -165,10 +193,18 @@ public class LoggedInView extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-               dispose();
+				try
+				{
+					clientController.disconnect();
+				}
+				catch (IOException exception)
+				{
+					exception.printStackTrace();
+				}
+				dispose();
 			}
 		});
-		clientEndSessionButton.setBounds(755, 533,  115, 70);
+		clientEndSessionButton.setBounds(755, 533, 115, 70);
 		getContentPane().add(clientEndSessionButton);
 
 		//Upload pic button
@@ -188,7 +224,7 @@ public class LoggedInView extends JFrame
 				}
 			}
 		});
-		uploadBtn.setBounds(490, 533, 120 , 70);
+		uploadBtn.setBounds(490, 533, 120, 70);
 		getContentPane().add(uploadBtn);
 		JLabel activeUserLabel = new JLabel("Online:");
 		activeUserLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -248,15 +284,103 @@ public class LoggedInView extends JFrame
 		btngrp.add(contactListBtn);
 		setVisible(true);
 
-
-		//TODO: Delete this shit later!!!!
-		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		frame.setSize(1000,1000);
-		JButton button = new JButton("X");
-		button.setBackground(Color.red);
-		panel.add(button);
-		frame.setContentPane(panel);
-		frame.setVisible(true);
 	}
+
+
+	public void clearSelectedUser()
+	{
+		clientActiveUsersList.clearSelection();
+	}
+
+	public void addUserToOnlineList(User user)
+	{
+		listModel.addElement(user);
+		clientActiveUsersList.setModel(listModel);
+	}
+
+	public void setOnlineList(Set<User> users)
+	{
+		listModel.clear();
+		users.forEach(u -> listModel.addElement(u));
+		clientActiveUsersList.setModel(listModel);
+
+	}
+
+	public void sendMessageLogic(String textAreaMessage, ImageIcon selectedImg)
+	{
+		User to;
+		if (clientActiveUsersList.getSelectedValue() == null)
+		{
+			to = (User) contactJList.getSelectedValue();
+		}
+		else
+
+		{
+			to = (User) clientActiveUsersList.getSelectedValue();
+		}
+
+		Message message = new Message(textAreaMessage, selectedImg, user, to);
+		try
+		{
+			clientController.sendMessage(message);
+		}
+		catch (IOException exception)
+		{
+			exception.printStackTrace();
+		}
+		MessageImage = null;
+		clientTypingBoard.setText("");
+	}
+
+
+	class MessageBoxRenderer extends DefaultListCellRenderer
+	{
+
+		Font font = new Font("helvitica", Font.BOLD, 12);
+
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+		                                              boolean cellHasFocus)
+		{
+			Message message = (Message) value;
+			JLabel label = (JLabel) super.getListCellRendererComponent(list, message, index, isSelected, cellHasFocus);
+			if (message.getImage() != null)
+			{
+				Image image = message.getImage().getImage(); // transform it
+				Image newimg = image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH); // scale it the
+				// smooth way
+				ImageIcon icon = new ImageIcon(newimg);
+				label.setIcon(icon);
+			}
+			label.setHorizontalTextPosition(JLabel.LEFT);
+			label.setFont(font);
+			return label;
+		}
+	}
+
+	class UserBoxRenderer extends DefaultListCellRenderer
+	{
+
+		Font font = new Font("helvitica", Font.BOLD, 12);
+
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+		                                              boolean cellHasFocus)
+		{
+			User user = (User) value;
+			JLabel label = (JLabel) super.getListCellRendererComponent(list, user.getUsername(), index, isSelected,
+					cellHasFocus);
+			Image image = user.getProfilePicture().getImage(); // transform it
+			Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH); // scale it the
+			// smooth way
+			ImageIcon icon = new ImageIcon(newimg);
+			label.setIcon(icon);
+			label.setHorizontalTextPosition(JLabel.RIGHT);
+			label.setFont(font);
+			return label;
+		}
+	}
+
+
 }
+

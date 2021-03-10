@@ -3,13 +3,13 @@ package Model.Shared;
 import java.io.Serializable;
 import java.util.HashSet;
 
-public class SynchronizedHashSet<V>
+public class SynchronizedHashSet<V> implements Serializable
 {
 	private HashSet<V> values;
 
-	public SynchronizedHashSet(HashSet<V> values)
+	public SynchronizedHashSet()
 	{
-		this.values = values;
+		this.values = new HashSet<>();
 	}
 
 	public synchronized void add(V val)
@@ -34,5 +34,8 @@ public class SynchronizedHashSet<V>
 		values.remove(val);
 	}
 
-
+	public HashSet<V> getValues()
+	{
+		return values;
+	}
 }

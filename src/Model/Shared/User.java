@@ -1,53 +1,41 @@
 package Model.Shared;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
-import java.net.Socket;
 import java.util.*;
-import java.util.List;
 
 public class User extends Thread implements Serializable
 {
 	@Serial
 	private static final long serialVersionUID = 3178179156010420956L;
 	private UUID uuid;
-	private Socket socket;
 	private Set<User> contacts;
 	private List<Message> sentMessages;
 	private List<Message> receivedMessages;
 	private String username;
-	private Icon profilePicture;
-	private ObjectOutputStream oos;
+	//private Icon profilePicture;
+	private ImageIcon profilePicture;
+	private boolean isLoggedIn;
+
 
 	public User(String username, ImageIcon profilePicture)
 	{
-		try
-		{
-			this.socket = new Socket("localhost", 3500);
-			oos = new ObjectOutputStream(socket.getOutputStream());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		this.receivedMessages = new ArrayList<>();
 		this.sentMessages = new ArrayList<>();
 		this.contacts = new HashSet<>();
 		uuid = UUID.randomUUID();
 		this.username = username;
 		this.profilePicture = profilePicture;
-
-		checkFile();
+		isLoggedIn = false;
 	}
 
-	public void checkFile()
+	public static User getUserFromFile()
 	{
 		File dirr = new File("C:\\client_chat");
 
 		if (!dirr.exists())
 		{
-			dirr.mkdirs();
+			return null;
 		}
 		else
 		{
@@ -59,44 +47,22 @@ public class User extends Thread implements Serializable
 					FileInputStream fi = new FileInputStream(obj);
 					ObjectInputStream oi = new ObjectInputStream(fi);
 
-					this.setContacts(((User) oi.readObject()).getContacts());
-					this.setReceivedMessages(((User) oi.readObject()).receivedMessages);
-					this.setSentMessages(((User) oi.readObject()).sentMessages);
+					return (User) oi.readObject();
 				}
 				catch (IOException | ClassNotFoundException e)
 				{
 					e.printStackTrace();
 				}
 			}
+			else
+			{
+				return null;
+			}
 
 		}
 		return null;
 	}
 
-	@Override
-	public void run()
-	{
-		try
-		{
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-
-			while (!this.isInterrupted())
-			{
-				if (ois.available() == 0)
-				{
-					return;
-				}
-
-				Message message = (Message) ois.readObject();
-				receivedMessages.add(message);
-			}
-		}
-		catch (IOException | ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		saveUser();
-	}
 
 	public List<Message> getMessagesFromUserInOrder(User user)
 	{
@@ -121,17 +87,34 @@ public class User extends Thread implements Serializable
 		return messages;
 	}
 
-	public void sendMessage(User user, String text, Image image) throws IOException
+	public Message[] getAllMessageInOrder()
 	{
-		oos.writeObject(new Message(text, image, this, user));
-		oos.flush();
+		List<Message> allMessages = new ArrayList<>();
+		allMessages.addAll(sentMessages);
+		allMessages.addAll(receivedMessages);
+		Collections.reverse(allMessages);
+		Message[] array = new Message[allMessages.size()];
+
+		for (int i = 0; i < allMessages.size(); i++)
+		{
+			array[i] = allMessages.get(i);
+		}
+
+		return array;
 	}
+
 
 	public void saveUser()
 	{
+		File dirr = new File("C:\\client_chat");
+
+		if (!dirr.exists())
+		{
+			dirr.mkdir();
+		}
 		try
 		{
-			FileOutputStream fileOut = new FileOutputStream("C:\\client_chat");
+			FileOutputStream fileOut = new FileOutputStream("C:\\client_chat\\info.txt");
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(this);
 			objectOut.close();
@@ -210,5 +193,16 @@ public class User extends Thread implements Serializable
 	public boolean isLoggedIn()
 	{
 		return isLoggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn)
+	{
+		isLoggedIn = loggedIn;
+	}
+
+	@Override
+	public String toString()
+	{
+		return this.username;
 	}
 }

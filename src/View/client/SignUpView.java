@@ -39,7 +39,7 @@ public class SignUpView extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		this.setResizable(false);
 		txtUsername = new JTextField();
 		txtUsername.setToolTipText("Your username");
 		txtUsername.setFont(new Font("Tahoma", Font.PLAIN, 20));

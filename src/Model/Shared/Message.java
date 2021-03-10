@@ -1,58 +1,79 @@
 package Model.Shared;
 
-import java.awt.*;
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Message implements Serializable, Comparable {
+public class Message implements Serializable, Comparable
+{
 	private String message;
-	private Image image;
+	private ImageIcon imageIcon;
 	private User sender;
 	private User receiver;
 	private Date timeStamp;
 
-	public Message(String message, Image image, User sender, User receiver) {
+	public Message(String message, ImageIcon image, User sender, User receiver)
+	{
 		this.message = message;
-		this.image = image;
+		this.imageIcon = image;
 		this.sender = sender;
 		this.receiver = receiver;
 		this.timeStamp = new Date(System.currentTimeMillis());
 	}
 
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(Object o)
+	{
 		return this.timeStamp.compareTo(((Message) o).timeStamp);
 	}
 
-	public User getSender() {
+	public User getSender()
+	{
 		return sender;
 	}
 
-	public void setSender(User sender) {
+	public void setSender(User sender)
+	{
 		this.sender = sender;
 	}
 
-	public User getReceiver() {
+	public User getReceiver()
+	{
 		return receiver;
 	}
 
-	public void setReceiver(User receiver) {
+	public void setReceiver(User receiver)
+	{
 		this.receiver = receiver;
 	}
 
-	public String getMessage() {
+	public String getMessage()
+	{
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(String message)
+	{
 		this.message = message;
 	}
 
-	public Image getImage() {
-		return image;
+	public ImageIcon getImage()
+	{
+		return imageIcon;
 	}
 
-	public void setImage(Image image) {
-		this.image = image;
+	public void setImage(ImageIcon image)
+	{
+		this.imageIcon = image;
+	}
+
+	@Override
+	public String toString()
+	{
+
+		String reciverName = receiver != null ? receiver.getUsername() : "Everyone";
+		String messageText = sender.getUsername() + ": " + message + " to " + reciverName;
+
+		return messageText;
 	}
 }

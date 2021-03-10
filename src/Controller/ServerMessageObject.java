@@ -34,4 +34,10 @@ public class ServerMessageObject implements Serializable
 	{
 		this.object = object;
 	}
+
+	@Override
+	public String toString()
+	{
+		return object.toString() + " - " + type.name();
+	}
 }

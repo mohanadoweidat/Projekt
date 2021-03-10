@@ -89,6 +89,21 @@ public class ServerView extends JFrame
 		this.setResizable(false);
 	}
 
+	public void addUserToList(String userName)
+	{
+		controller.getServerView().getActiveUsers().addElement(userName);
+		controller.getServerView().getAllUsers().addElement(userName);
+		controller.getServerView().getActiveClientList().setModel(controller.getServerView().getActiveUsers());
+		controller.getServerView().getAllUserNameList().setModel(controller.getServerView().getAllUsers());
+	}
+
+	public void removeUserFromList(String userName)
+	{
+		getActiveUsers().removeElement(userName);
+		controller.getServerView().getActiveClientList().setModel(controller.getServerView().getActiveUsers());
+
+	}
+
 	//To show Message in ServerMessageBoard
 	public void serverMessageBoardAppend(String message)
 	{
