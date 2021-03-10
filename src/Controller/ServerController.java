@@ -22,6 +22,11 @@ public class ServerController
 		server = new Server(this, 3500);
 	}
 
+	public LoggerView getLoggerView()
+	{
+		return loggerView;
+	}
+
 
 	public ServerView getServerView()
 	{
