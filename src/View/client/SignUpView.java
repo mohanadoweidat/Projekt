@@ -117,8 +117,6 @@ public class SignUpView extends JFrame
 				}
 				else
 				{
-					//TODO: fix- När man klickar på connect då fryser skärmen. (GUI freezing) :: ? Thread
-					// problem:kanske?
 					String usernameText = txtUsername.getText();
 					try
 					{
@@ -128,7 +126,6 @@ public class SignUpView extends JFrame
 						//Username already exists (Connected)
 						if (exists)
 						{
-
 							JOptionPane.showMessageDialog(null, "Username already Connected, please login with " +
 									"another username!", "ERROR", JOptionPane.ERROR_MESSAGE);
 							txtUsername.setText("");
