@@ -22,7 +22,7 @@ public class LoggedInView extends JFrame {
         return clientMessageList;
     }
 
-    private JList clientActiveUsersList;
+    private JList<User> clientActiveUsersList;
 
     private JList contactJList;
 
@@ -136,7 +136,7 @@ public class LoggedInView extends JFrame {
 
 
         //clientActiveUsersList
-        clientActiveUsersList = new JList();
+        clientActiveUsersList = new JList<>();
         clientActiveUsersList.setCellRenderer(new UserBoxRenderer());
         listModel = new DefaultListModel<>();
         clientActiveUsersList.setModel(listModel);
@@ -147,7 +147,7 @@ public class LoggedInView extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() > 1) {
-                    User selectedUser = (User) clientActiveUsersList.getSelectedValue();
+                    User selectedUser = clientActiveUsersList.getSelectedValue();
                     user.getContacts().add(selectedUser);
                     contactJList.setListData(user.getContacts().toArray());
                 }
@@ -161,6 +161,16 @@ public class LoggedInView extends JFrame {
         contactJList.setToolTipText("Kontakter:");
         contactJList.setBounds(554, 63, 350, 460);
         contactJList.setCellRenderer(new UserBoxRenderer());
+        contactJList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
+                    User selectedUser = (User) contactJList.getSelectedValue();
+                    user.getContacts().remove(selectedUser);
+                    contactJList.setListData(user.getContacts().toArray());
+                }
+            }
+        });
         getContentPane().add(contactJList);
 
 
@@ -238,7 +248,7 @@ public class LoggedInView extends JFrame {
                 contactJList.setVisible(true);
             }
         });
-            contactListBtn.setBounds(800, 24, 100, 20);
+        contactListBtn.setBounds(800, 24, 100, 20);
         getContentPane().add(contactListBtn);
 
 
@@ -272,7 +282,7 @@ public class LoggedInView extends JFrame {
         if (clientActiveUsersList.getSelectedValue() == null) {
             to = (User) contactJList.getSelectedValue();
         } else {
-            to = (User) clientActiveUsersList.getSelectedValue();
+            to = clientActiveUsersList.getSelectedValue();
         }
 
         Message message = new Message(textAreaMessage, selectedImg, user, to);

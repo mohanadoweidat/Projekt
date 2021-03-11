@@ -2,16 +2,16 @@ package View.server;
 
 import Controller.ServerController;
 import Model.server.Logg;
+import com.github.lgooddatepicker.components.DateTimePicker;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.*;
 
 public class LoggerView extends JFrame {
 
@@ -21,13 +21,13 @@ public class LoggerView extends JFrame {
     private JList<Logg> loggListInfo;
 
 
-//	private DateTimePicker dtpStart;
-//	private DateTimePicker dtpEnd;
+    private DateTimePicker dtpStart;
+    private DateTimePicker dtpEnd;
 
-    private Controller.ServerController ServerController;
+    private ServerController serverController;
 
     public LoggerView(ServerController ServerController) {
-        this.ServerController = ServerController;
+        this.serverController = ServerController;
         init();
     }
 
@@ -54,18 +54,18 @@ public class LoggerView extends JFrame {
         lblStart.setBounds(750, 50, 100, 32);
         contentPane.add(lblStart);
 
-//		dtpStart = new DateTimePicker();
-//		dtpStart.setBounds(640, 100, 275, 32);
-//		contentPane.add(dtpStart);
+        dtpStart = new DateTimePicker();
+        dtpStart.setBounds(640, 100, 275, 32);
+        contentPane.add(dtpStart);
 
         JLabel lblEnd = new JLabel("To");
         lblEnd.setFont(f);
         lblEnd.setBounds(750, 250, 100, 32);
         contentPane.add(lblEnd);
 
-//		dtpEnd = new DateTimePicker();
-//		dtpEnd.setBounds(640, 300, 275, 32);
-//		contentPane.add(dtpEnd);
+        dtpEnd = new DateTimePicker();
+        dtpEnd.setBounds(640, 300, 275, 32);
+        contentPane.add(dtpEnd);
 
         btnUpdate = new JButton("Update");
         btnUpdate.addActionListener(new ButtonListener());
@@ -92,23 +92,40 @@ public class LoggerView extends JFrame {
 
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-//			if (e.getSource() == btnUpdate)
-//			{
-//				LocalDate LDFrom = dtpStart.datePicker.getDate();
-//				LocalTime LTFrom = dtpStart.timePicker.getTime();
-//
-//				LocalDate LDTo = dtpEnd.datePicker.getDate();
-//				LocalTime LTTo = dtpEnd.timePicker.getTime();
-//
-//				if (LDFrom == null || LTFrom == null || LDTo == null || LTTo == null)
-//				{
-//					JOptionPane.showMessageDialog(null, "Invalid date", "ERROR", JOptionPane.ERROR_MESSAGE);
-//				}
-//				else
-//				{
-//					//TODO: Fix --> upddatera viewn alltså texten med log information om vald intervall
-//				}
-//			}
+            if (e.getSource() == btnUpdate) {
+
+
+                ArrayList<Logg> updatedList = new ArrayList<>();
+
+                for (Logg logg : serverController.getServer().getLogs()) {
+                    if (dtpStart.datePicker.getDate() == null && dtpEnd.datePicker.getDate() == null) {
+                        updatedList.add(logg);
+                    } else if (dtpEnd.datePicker.getDate() == null) {
+                        Date ldFrom = convertToDate(dtpStart.datePicker.getDate());
+                        if (logg.getDate().after(ldFrom))
+                            updatedList.add(logg);
+                    } else if (dtpStart.datePicker.getDate() == null) {
+                        Date ldAfter = convertToDate(dtpEnd.datePicker.getDate());
+                        if (logg.getDate().before(ldAfter))
+                            updatedList.add(logg);
+                    } else {
+                        Date LDFrom = convertToDate(dtpStart.datePicker.getDate());
+                        Date LDTo = convertToDate(dtpEnd.datePicker.getDate());
+                        if (logg.getDate().after(LDFrom) && logg.getDate().before(LDTo))
+                            updatedList.add(logg);
+                    }
+
+                }
+
+                Logg[] finishedVersion = new Logg[updatedList.size()];
+                updatedList.toArray(finishedVersion);
+                loggListInfo.setListData(finishedVersion);
+
+            }
         }
+    }
+
+    public Date convertToDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
     }
 }

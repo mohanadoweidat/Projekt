@@ -38,4 +38,20 @@ public class ServerController {
     public void showLogs() {
         loggerView.setVisible(!loggerView.isVisible());
     }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    public void setServerView(ServerView serverView) {
+        this.serverView = serverView;
+    }
+
+    public void setLoggerView(LoggerView loggerView) {
+        this.loggerView = loggerView;
+    }
 }
