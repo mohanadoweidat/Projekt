@@ -245,6 +245,7 @@ public class LoggedInView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clientActiveUsersList.setVisible(false);
+                updateContacts();
                 contactJList.setVisible(true);
             }
         });
@@ -258,6 +259,10 @@ public class LoggedInView extends JFrame {
         btngrp.add(contactListBtn);
         setVisible(true);
 
+    }
+
+    private void updateContacts() {
+        this.contactJList.setListData(user.getContacts().toArray());
     }
 
 

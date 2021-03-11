@@ -38,8 +38,9 @@ public class User extends Thread implements Serializable {
                 try {
                     FileInputStream fi = new FileInputStream(obj);
                     ObjectInputStream oi = new ObjectInputStream(fi);
-
-                    return (User) oi.readObject();
+                    User user = (User) oi.readObject();
+                    System.out.println(user.getContacts().size());
+                    return user;
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -92,6 +93,7 @@ public class User extends Thread implements Serializable {
         try {
             FileOutputStream fileOut = new FileOutputStream("C:\\client_chat\\info.txt");
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            System.out.println(this.getContacts().size());
             objectOut.writeObject(this);
             objectOut.close();
         } catch (Exception ex) {
