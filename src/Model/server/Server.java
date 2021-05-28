@@ -20,7 +20,6 @@ public class Server extends Thread
 	private ServerController controller;
 	private SynchronizedHashSet<Message> unsentMessages;
 	private HashSet<Logg> logs;
-
 	private ServerSocket serverSocket;
 	private int port;
 	public static Map<User, ClientControllerHandler> onlineUsers = new HashMap();
@@ -47,7 +46,6 @@ public class Server extends Thread
 	@Override
 	public void run()
 	{
-
 		while (!this.isInterrupted())
 		{
 			try
@@ -61,15 +59,12 @@ public class Server extends Thread
 			{
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 
 	public void loadServerFromFile()
 	{
 		File dirr = new File("C:\\server_chat");
-
 		if (!dirr.exists())
 		{
 			dirr.mkdirs();
@@ -95,14 +90,12 @@ public class Server extends Thread
 					e.printStackTrace();
 				}
 			}
-
 		}
 	}
 
 	public void saveServer()
 	{
 		File dirr = new File("C:\\server_chat");
-
 		if (!dirr.exists())
 		{
 			dirr.mkdir();
@@ -126,22 +119,18 @@ public class Server extends Thread
 	{
 		return this.logs;
 	}
-
 	public void setLogs(HashSet<Logg> logs)
 	{
 		this.logs = logs;
 	}
-
 	public SynchronizedHashSet<Message> getUnsentMessages()
 	{
 		return this.unsentMessages;
 	}
-
 	public void setUnsentMessages(SynchronizedHashSet<Message> messages)
 	{
 		this.unsentMessages = messages;
 	}
-
 
 	private class ClientControllerHandler extends Thread
 	{
@@ -159,7 +148,6 @@ public class Server extends Thread
 			}
 			catch (Exception e)
 			{
-
 			}
 			this.start();
 		}
@@ -176,7 +164,6 @@ public class Server extends Thread
 				}
 				try
 				{
-
 					if (socket.getInputStream().available() == 0)
 					{
 						continue;
@@ -185,7 +172,6 @@ public class Server extends Thread
 					Logg logg = new Logg(o);
 					logs.add(logg);
 					controller.getLoggerView().updateLoggList(logs);
-
 					switch (o.getType())
 					{
 						case CREATE_USER:
@@ -193,8 +179,7 @@ public class Server extends Thread
 							onlineUsers.put(user, this);
 							controller.getServerView().addUserToList(user.getUsername());
 							controller.getServerView().serverMessageBoardAppend("New user connected: " + user.getUsername());
-							updateClients(new ServerMessageObject(MessageType.NEW_USER_CONNECTION,
-									new HashSet<>(onlineUsers.keySet())));
+							updateClients(new ServerMessageObject(MessageType.NEW_USER_CONNECTION, new HashSet<>(onlineUsers.keySet())));
 							readUnsentMessage(user);
 							break;
 						case VERFY_NAME:
@@ -236,14 +221,12 @@ public class Server extends Thread
 							{
 								reciverHandler.update(o);
 							}
-
 					}
 				}
 				catch (java.io.IOException | java.lang.ClassNotFoundException e)
 				{
 					e.printStackTrace();
 				}
-
 			}
 		}
 
@@ -294,7 +277,6 @@ public class Server extends Thread
 		}
 		return null;
 	}
-
 }
 
 

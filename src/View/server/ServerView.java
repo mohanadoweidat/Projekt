@@ -1,10 +1,6 @@
 package View.server;
-
 import Controller.ServerController;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ServerView extends JFrame {
     private JTextArea serverMessageBoard;

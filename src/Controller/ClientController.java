@@ -26,7 +26,7 @@ public class ClientController extends Thread {
     }
 
     public ClientController() throws IOException {
-        s = new Socket("localhost", 3500);
+        s = new Socket("217.115.51.195", 3500);
         inputStream = new ObjectInputStream(s.getInputStream());
         outStream = new ObjectOutputStream(s.getOutputStream());
         signUpView = new SignUpView(this);
@@ -34,6 +34,7 @@ public class ClientController extends Thread {
 
     public ClientController(User u) throws IOException {
         this.user = u;
+        //s = new Socket("217.115.51.195", 3500);
         s = new Socket("localhost", 3500);
         inputStream = new ObjectInputStream(s.getInputStream());
         outStream = new ObjectOutputStream(s.getOutputStream());
