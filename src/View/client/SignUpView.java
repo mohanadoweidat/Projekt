@@ -130,7 +130,6 @@ public class SignUpView extends JFrame
 									"another username!", "ERROR", JOptionPane.ERROR_MESSAGE);
 							txtUsername.setText("");
 						}
-
 						//Username not Connected to the server ---> Done login
 						else
 						{

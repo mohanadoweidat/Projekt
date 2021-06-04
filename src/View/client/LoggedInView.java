@@ -21,12 +21,9 @@ public class LoggedInView extends JFrame {
     public JList<Message> getClientMessageList() {
         return clientMessageList;
     }
-
     private JList<User> clientActiveUsersList;
 
     private JList contactJList;
-
-
     private JRadioButton oneToNBtn;
     private JRadioButton broadcastBtn;
     private JRadioButton contactListBtn;
@@ -53,15 +50,9 @@ public class LoggedInView extends JFrame {
         init();
     }
 
-    //TODO: Just for debug --> delete later!
-    public static void main(String[] args) {
-        new LoggedInView(null);
-    }
-
 
     public void init() {
         //Frame
-        //setTitle("Client Frame-" + user.getUsername());
         setTitle("Messenger - Logged in as: " + user.getUsername());
         setBounds(100, 100, 926, 680);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -264,22 +255,17 @@ public class LoggedInView extends JFrame {
     private void updateContacts() {
         this.contactJList.setListData(user.getContacts().toArray());
     }
-
-
     public void clearSelectedUser() {
         clientActiveUsersList.clearSelection();
     }
-
     public void addUserToOnlineList(User user) {
         listModel.addElement(user);
         clientActiveUsersList.setModel(listModel);
     }
-
     public void setOnlineList(Set<User> users) {
         listModel.clear();
         users.forEach(u -> listModel.addElement(u));
         clientActiveUsersList.setModel(listModel);
-
     }
 
     public void sendMessageLogic(String textAreaMessage, ImageIcon selectedImg) {

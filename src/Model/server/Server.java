@@ -1,8 +1,8 @@
 package Model.server;
 
-import Controller.MessageType;
+import Model.Shared.MessageType;
 import Controller.ServerController;
-import Controller.ServerMessageObject;
+import Model.Shared.ServerMessageObject;
 import Model.Shared.Message;
 import Model.Shared.SynchronizedHashSet;
 import Model.Shared.User;
@@ -25,6 +25,12 @@ public class Server extends Thread
 	public static Map<User, ClientControllerHandler> onlineUsers = new HashMap();
 
 
+	/**
+	 * Constructor.
+	 * @param controller Controller.
+	 * @param port Port number.
+	 * @throws IOException
+	 */
 	public Server(ServerController controller, int port) throws IOException
 	{
 		this.controller = controller;
@@ -43,6 +49,9 @@ public class Server extends Thread
 	}
 
 
+	/**
+	 * This function will wait for clients to connect to the server.
+	 */
 	@Override
 	public void run()
 	{
@@ -62,6 +71,9 @@ public class Server extends Thread
 		}
 	}
 
+	/**
+	 * This function will load serverFile from the pc.
+	 */
 	public void loadServerFromFile()
 	{
 		File dirr = new File("C:\\server_chat");
@@ -93,6 +105,9 @@ public class Server extends Thread
 		}
 	}
 
+	/**
+	 * This function will save the server with the logs to the pc.
+	 */
 	public void saveServer()
 	{
 		File dirr = new File("C:\\server_chat");
@@ -115,23 +130,46 @@ public class Server extends Thread
 		}
 	}
 
+
+	/**
+	 * Getter for getLogs.
+	 * @return HashSet<Logg>
+	 */
 	public HashSet<Logg> getLogs()
 	{
 		return this.logs;
 	}
+
+	/**
+	 * Setter for HashSet<Logg> logs.
+	 * @param logs the logs.
+	 */
 	public void setLogs(HashSet<Logg> logs)
 	{
 		this.logs = logs;
 	}
+
+	/**
+	 * Getter for SynchronizedHashSet<Message>
+	 * @return SynchronizedHashSet<Message>
+	 */
 	public SynchronizedHashSet<Message> getUnsentMessages()
 	{
 		return this.unsentMessages;
 	}
+
+	/**
+	 * Setter for SynchronizedHashSet<Message>
+	 * @param messages SynchronizedHashSet<Message>
+	 */
 	public void setUnsentMessages(SynchronizedHashSet<Message> messages)
 	{
 		this.unsentMessages = messages;
 	}
 
+	/**
+	 * This class will handle the client.
+	 */
 	private class ClientControllerHandler extends Thread
 	{
 		Socket socket;
@@ -152,6 +190,11 @@ public class Server extends Thread
 			this.start();
 		}
 
+		/**
+		 * This function is for updating the logs and saving it, and connecting the users to the server and saving
+		 * unsent messages. Checking if, the username already exist in the server.
+		 * Disconnect the  user and send messages to other users.
+		 */
 		@Override
 		public void run()
 		{
@@ -230,6 +273,10 @@ public class Server extends Thread
 			}
 		}
 
+		/**
+		 * This function is for updating server objects.
+		 * @param object Server message object.
+		 */
 		public void update(ServerMessageObject object)
 		{
 			try
@@ -245,6 +292,10 @@ public class Server extends Thread
 		}
 	}
 
+	/**
+	 * This function is for reading unsent messages for offline users.
+	 * @param user the user.
+	 */
 	public void readUnsentMessage(User user)
 	{
 		for (Message value : unsentMessages.getValues())
@@ -257,6 +308,10 @@ public class Server extends Thread
 		}
 	}
 
+	/**
+	 * This function is for updating the online users.
+	 * @param object server message object.
+	 */
 	public void updateClients(ServerMessageObject object)
 	{
 		for (User user : onlineUsers.keySet())
@@ -266,6 +321,11 @@ public class Server extends Thread
 		}
 	}
 
+	/**
+	 * This function is for getting a specific user by name.
+	 * @param userName the user username.
+	 * @return User object.
+	 */
 	public User getUserByName(String userName)
 	{
 		for (User u : onlineUsers.keySet())

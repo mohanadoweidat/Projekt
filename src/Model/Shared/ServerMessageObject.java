@@ -1,7 +1,10 @@
-package Controller;
+package Model.Shared;
 
 import java.io.Serializable;
 
+/**
+ * This class is used  for communication between the client and the server.
+ */
 public class ServerMessageObject implements Serializable
 {
 	private MessageType type;
@@ -18,18 +21,14 @@ public class ServerMessageObject implements Serializable
 	{
 		return type;
 	}
-
 	public Object getObject()
 	{
 		return object;
 	}
-
-
 	public void setType(MessageType type)
 	{
 		this.type = type;
 	}
-
 	public void setObject(Object object)
 	{
 		this.object = object;

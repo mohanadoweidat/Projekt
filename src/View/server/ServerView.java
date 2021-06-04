@@ -7,12 +7,9 @@ public class ServerView extends JFrame {
     private JList allUserNameList;
     private JList activeClientList;
 
-    private JButton logViewrButton;
-
     public JList getAllUserNameList() {
         return allUserNameList;
     }
-
     public JList getActiveClientList() {
         return activeClientList;
     }
@@ -24,7 +21,6 @@ public class ServerView extends JFrame {
     public DefaultListModel<String> getActiveUsers() {
         return activeUsers;
     }
-
     public DefaultListModel<String> getAllUsers() {
         return allUsers;
     }
@@ -88,6 +84,7 @@ public class ServerView extends JFrame {
         this.setResizable(false);
     }
 
+    //Add active user to the list.
     public void addUserToList(String userName) {
         controller.getServerView().getActiveUsers().addElement(userName);
         controller.getServerView().getAllUsers().addElement(userName);
@@ -95,6 +92,7 @@ public class ServerView extends JFrame {
         controller.getServerView().getAllUserNameList().setModel(controller.getServerView().getAllUsers());
     }
 
+    //Remove active user from the list.
     public void removeUserFromList(String userName) {
         getActiveUsers().removeElement(userName);
         controller.getServerView().getActiveClientList().setModel(controller.getServerView().getActiveUsers());

@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * A class thar represents a user.
+ */
 public class User extends Thread implements Serializable {
     @Serial
     private static final long serialVersionUID = 3178179156010420956L;
@@ -12,11 +15,14 @@ public class User extends Thread implements Serializable {
     private List<Message> sentMessages;
     private List<Message> receivedMessages;
     private String username;
-    //private Icon profilePicture;
     private ImageIcon profilePicture;
     private boolean isLoggedIn;
 
-
+    /**
+     * Constructor.
+     * @param username The username.
+     * @param profilePicture User profile picture.
+     */
     public User(String username, ImageIcon profilePicture) {
         this.receivedMessages = new ArrayList<>();
         this.sentMessages = new ArrayList<>();
@@ -27,6 +33,10 @@ public class User extends Thread implements Serializable {
         isLoggedIn = false;
     }
 
+    /**
+     * This function will check for a user object from a file saved into the pc.
+     * @return User object.
+     */
     public static User getUserFromFile() {
         File dirr = new File("C:\\client_chat");
 
@@ -53,6 +63,12 @@ public class User extends Thread implements Serializable {
     }
 
 
+    /**
+     * This function will return all the messages from specified user.
+     * @param user The specified user.
+     * @return List<Message>
+     */
+    @Deprecated
     public List<Message> getMessagesFromUserInOrder(User user) {
         List<Message> messages = new ArrayList<>();
         for (Message message : getReceivedMessages()) {
@@ -71,7 +87,7 @@ public class User extends Thread implements Serializable {
         return messages;
     }
 
-    public Message[] getAllMessageInOrder() {
+    public Message[] getAllMessageInOrder(){
         List<Message> allMessages = new ArrayList<>();
         allMessages.addAll(sentMessages);
         allMessages.addAll(receivedMessages);
@@ -79,11 +95,13 @@ public class User extends Thread implements Serializable {
         Message[] array = new Message[allMessages.size()];
 
         allMessages.toArray(array);
-
         return array;
     }
 
 
+    /**
+     * This function will save the user object into  a file into the pc.
+     */
     public void saveUser() {
         File dirr = new File("C:\\client_chat");
 
@@ -101,14 +119,20 @@ public class User extends Thread implements Serializable {
         }
     }
 
+    /**
+     * This function is for adding contact to the user.
+     * @param user  User object.
+     */
     public void addContact(User user) {
         contacts.add(user);
     }
 
+    /**
+     * Getters and setters for instance variables.
+     */
     public UUID getUuid() {
         return uuid;
     }
-
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
@@ -116,7 +140,6 @@ public class User extends Thread implements Serializable {
     public Set<User> getContacts() {
         return contacts;
     }
-
     public void setContacts(Set<User> contacts) {
         this.contacts = contacts;
     }
@@ -124,7 +147,6 @@ public class User extends Thread implements Serializable {
     public List<Message> getSentMessages() {
         return sentMessages;
     }
-
     public void setSentMessages(List<Message> sentMessages) {
         this.sentMessages = sentMessages;
     }
@@ -132,7 +154,6 @@ public class User extends Thread implements Serializable {
     public List<Message> getReceivedMessages() {
         return receivedMessages;
     }
-
     public void setReceivedMessages(List<Message> receivedMessages) {
         this.receivedMessages = receivedMessages;
     }
@@ -140,7 +161,6 @@ public class User extends Thread implements Serializable {
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -148,7 +168,6 @@ public class User extends Thread implements Serializable {
     public ImageIcon getProfilePicture() {
         return profilePicture;
     }
-
     public void setProfilePicture(ImageIcon profilePicture) {
         this.profilePicture = profilePicture;
     }
@@ -156,7 +175,6 @@ public class User extends Thread implements Serializable {
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
-
     public void setLoggedIn(boolean loggedIn) {
         isLoggedIn = loggedIn;
     }

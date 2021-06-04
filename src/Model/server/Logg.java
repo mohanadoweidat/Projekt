@@ -1,10 +1,13 @@
 package Model.server;
 
-import Controller.ServerMessageObject;
+import Model.Shared.ServerMessageObject;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * This class is for Logg.
+ */
 public class Logg implements Comparable, Serializable
 {
 	private Date date;

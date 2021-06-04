@@ -3,10 +3,17 @@ package Model.Shared;
 import java.io.Serializable;
 import java.util.HashSet;
 
+/**
+ * This class used for saving unsent messages from offline users.
+ * @param <V> The generic type of the synchronizedHashSet.
+ */
 public class SynchronizedHashSet<V> implements Serializable
 {
 	private HashSet<V> values;
 
+	/**
+	 * Constructor.
+	 */
 	public SynchronizedHashSet()
 	{
 		this.values = new HashSet<>();
