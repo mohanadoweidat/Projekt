@@ -54,6 +54,7 @@ public class LoggedInView extends JFrame {
     public void init() {
         //Frame
         setTitle("Messenger - Logged in as: " + user.getUsername());
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(100, 100, 926, 680);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);

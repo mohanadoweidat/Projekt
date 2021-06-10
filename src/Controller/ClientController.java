@@ -23,13 +23,13 @@ public class ClientController extends Thread {
     private LoggedInView view;
     private SignUpView signUpView;
 
-
     /**
      * Constructor.
+     *
      * @throws IOException exception
      */
     public ClientController() throws IOException {
-        s = new Socket("217.115.51.195", 3500); //Den här kommer att användas om Mohanad kör servern.
+        s = new Socket("localhost", 3500); //Den här kommer att användas om Mohanad kör servern.
         //s = new Socket("localhost", 3500); // Den här används bara om du kör servern på din egen dator!
         inputStream = new ObjectInputStream(s.getInputStream());
         outStream = new ObjectOutputStream(s.getOutputStream());
@@ -38,12 +38,13 @@ public class ClientController extends Thread {
 
     /**
      * Constructor.
+     *
      * @param u user object.
      * @throws IOException exception
      */
     public ClientController(User u) throws IOException {
         this.user = u;
-        s = new Socket("217.115.51.195", 3500); //Den här kommer att användas om Mohanad kör servern.
+        s = new Socket("localhost", 3500); //Den här kommer att användas om Mohanad kör servern.
         //s = new Socket("localhost", 3500); // Den här används bara om du kör servern på din egen dator!
         inputStream = new ObjectInputStream(s.getInputStream());
         outStream = new ObjectOutputStream(s.getOutputStream());
@@ -71,7 +72,7 @@ public class ClientController extends Thread {
                 switch (messageObject.getType()) {
                     case SEND_MESSAGE -> {
                         Message message = (Message) messageObject.getObject();
-                        System.out.println(message.getSender().getUsername() + ": " + message.getMessage());
+                        //System.out.println(message.getSender().getUsername() + ": " + message.getMessage());
                         user.getReceivedMessages().add(message);
                         view.getClientMessageList().setListData(user.getAllMessageInOrder());
                     }
@@ -91,8 +92,9 @@ public class ClientController extends Thread {
 
     /**
      * This function is used to send messages and save the sent messages.
+     *
      * @param message the message to be sent
-     * @throws IOException  exception
+     * @throws IOException exception
      */
     public void sendMessage(Message message) throws IOException {
         System.out.println(this.user.getUsername() + "> " + message.getMessage());
@@ -105,9 +107,10 @@ public class ClientController extends Thread {
 
     /**
      * Check if the user is already connected to the server
+     *
      * @param username uesername to the user
      * @return true or false.
-     * @throws IOException exception
+     * @throws IOException            exception
      * @throws ClassNotFoundException exception
      */
     public boolean CheckIfUserExists(String username) throws IOException, ClassNotFoundException {
@@ -123,6 +126,7 @@ public class ClientController extends Thread {
 
     /**
      * This function will disconnect the user and save its data local on the pc.
+     *
      * @throws IOException exception
      */
     public void disconnect() throws IOException {
@@ -133,8 +137,9 @@ public class ClientController extends Thread {
 
     /**
      * It will create a user and send it to the server
+     *
      * @param usernameText username
-     * @param icon user icon.
+     * @param icon         user icon.
      * @return the user object
      */
     public User createUser(String usernameText, ImageIcon icon) {
@@ -153,6 +158,7 @@ public class ClientController extends Thread {
 
     /**
      * Get User object.
+     *
      * @return User object
      */
     public User getUser() {
@@ -161,6 +167,7 @@ public class ClientController extends Thread {
 
     /**
      * Get loggedInView
+     *
      * @return loggedInView
      */
     public LoggedInView getView() {
@@ -169,6 +176,7 @@ public class ClientController extends Thread {
 
     /**
      * Set LoggedInView
+     *
      * @param view LoggedInView
      */
     public void setView(LoggedInView view) {
