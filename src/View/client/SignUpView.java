@@ -75,7 +75,6 @@ public class SignUpView extends JFrame
 		btnChooseImage.addActionListener(new ButtonListener());
 		contentPane.add(btnChooseImage);
 		setVisible(true);
-
 	}
 
 	private class ButtonListener implements ActionListener

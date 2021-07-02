@@ -29,8 +29,8 @@ public class ClientController extends Thread {
      * @throws IOException exception
      */
     public ClientController() throws IOException {
-        s = new Socket("217.115.51.195", 3500); //Den här kommer att användas om Mohanad kör servern.
-        //s = new Socket("localhost", 3500); // Den här används bara om du kör servern på din egen dator!
+        // s = new Socket("217.115.51.195", 3500); //Den här kommer att användas om Mohanad kör servern.
+        s = new Socket("localhost", 3500); // Den här används bara om du kör servern på din egen dator!
         inputStream = new ObjectInputStream(s.getInputStream());
         outStream = new ObjectOutputStream(s.getOutputStream());
         signUpView = new SignUpView(this);

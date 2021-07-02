@@ -1,6 +1,0 @@
-test
-C:\Users\mohan\Desktop\Uml_classes_en.svg.png
-test2
-C:\Users\mohan\Desktop\Uml_classes_en.svg.png
-test3
-C:\Users\mohan\Desktop\Uml_classes_en.svg.png

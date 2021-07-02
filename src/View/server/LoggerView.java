@@ -98,23 +98,29 @@ public class LoggerView extends JFrame {
                 ArrayList<Logg> updatedList = new ArrayList<>();
 
                 for (Logg logg : serverController.getServer().getLogs()) {
-                    if (dtpStart.datePicker.getDate() == null && dtpEnd.datePicker.getDate() == null) {
+                    if (dtpStart.datePicker.getDate() == null && dtpEnd.datePicker.getDate() == null)
+                    {
                         updatedList.add(logg);
-                    } else if (dtpEnd.datePicker.getDate() == null) {
+                    }
+                    else if (dtpEnd.datePicker.getDate() == null)
+                    {
                         Date ldFrom = convertToDate(dtpStart.datePicker.getDate());
                         if (logg.getDate().after(ldFrom))
                             updatedList.add(logg);
-                    } else if (dtpStart.datePicker.getDate() == null) {
+                    }
+                    else if (dtpStart.datePicker.getDate() == null)
+                    {
                         Date ldAfter = convertToDate(dtpEnd.datePicker.getDate());
                         if (logg.getDate().before(ldAfter))
                             updatedList.add(logg);
-                    } else {
+                    }
+                    else
+                    {
                         Date LDFrom = convertToDate(dtpStart.datePicker.getDate());
                         Date LDTo = convertToDate(dtpEnd.datePicker.getDate());
                         if (logg.getDate().after(LDFrom) && logg.getDate().before(LDTo))
                             updatedList.add(logg);
                     }
-
                 }
 
                 Logg[] finishedVersion = new Logg[updatedList.size()];
