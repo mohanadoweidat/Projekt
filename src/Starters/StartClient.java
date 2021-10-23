@@ -1,10 +1,8 @@
 package Starters;
 
+import Controller.ClientController;
 import Model.Shared.User;
 
-import Controller.ClientController;
-
-import java.awt.*;
 import java.io.IOException;
 
 public class StartClient
